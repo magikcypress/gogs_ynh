@@ -9,9 +9,11 @@ admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
 language=$YNH_APP_ARG_LANGUAGE
 
-ynh_app_setting_set "$app" admin "$admin"
-ynh_app_setting_set "$app" is_public "$is_public"
-ynh_app_setting_set "$app" language "$language"
+sudo yunohost app setting $app domain -v $domain
+sudo yunohost app setting $app path -v $path
+sudo yunohost app setting $app admin -v $admin
+sudo yunohost app setting $app is_public -v $is_public
+sudo yunohost app setting $app language -v $language
 
 if [[ $(cat /etc/debian_version) = "7."* ]]
 then
