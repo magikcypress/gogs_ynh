@@ -1,14 +1,17 @@
 #!/bin/bash
 
-set -e
-
-app=gogs
+app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-domain=$1
-path=$2
-admin=$3
-is_public=$4
+domain=$YNH_APP_ARG_DOMAIN
+path=$YNH_APP_ARG_PATH
+admin=$YNH_APP_ARG_ADMIN
+is_public=$YNH_APP_ARG_IS_PUBLIC
+language=$YNH_APP_ARG_LANGUAGE
+
+ynh_app_setting_set "$app" admin "$admin"
+ynh_app_setting_set "$app" is_public "$is_public"
+ynh_app_setting_set "$app" language "$language"
 
 if [[ $(cat /etc/debian_version) = "7."* ]]
 then
@@ -17,8 +20,8 @@ then
 fi
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a $app  \
-    || (echo "Path not available: $domain$path" && exit 1)
+sudo yunohost app checkurl "${domain}${path}" -a "$app" \
+|| ynh_die "Path not available: ${domain}${path}"
 
 # Check that admin user is an existing account
 sudo yunohost user list --json | grep -q "\"username\": \"$admin\"" \
